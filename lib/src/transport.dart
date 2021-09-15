@@ -286,7 +286,7 @@ class Transport {
       });
     }
 
-    _reconnect(error);
+    // _reconnect(error);
   }
 
   void _onData(dynamic data) {
