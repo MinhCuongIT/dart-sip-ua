@@ -1394,13 +1394,13 @@ class RTCSession extends EventManager {
    */
   void onTransportError() {
     logger.error('onTransportError()');
-    if (_status != C.STATUS_TERMINATED) {
-      terminate(<String, dynamic>{
-        'status_code': 500,
-        'reason_phrase': DartSIP_C.causes.CONNECTION_ERROR,
-        'cause': DartSIP_C.causes.CONNECTION_ERROR
-      });
-    }
+    // if (_status != C.STATUS_TERMINATED) {
+    //   terminate(<String, dynamic>{
+    //     'status_code': 500,
+    //     'reason_phrase': DartSIP_C.causes.CONNECTION_ERROR,
+    //     'cause': DartSIP_C.causes.CONNECTION_ERROR
+    //   });
+    // }
   }
 
   void onRequestTimeout() {
