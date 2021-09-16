@@ -38,14 +38,14 @@ class NonInviteClientTransaction extends TransactionBase {
 
   @override
   void send() {
-    stateChanged(TransactionState.TRYING);
-    F = setTimeout(() {
-      timer_F();
-    }, Timers.TIMER_F);
+    // stateChanged(TransactionState.TRYING);
+    // F = setTimeout(() {
+    //   timer_F();
+    // }, Timers.TIMER_F);
 
-    if (!transport.send(request)) {
-      onTransportError();
-    }
+    // if (!transport.send(request)) {
+    //   onTransportError();
+    // }
   }
 
   @override
