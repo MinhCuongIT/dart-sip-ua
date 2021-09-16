@@ -142,7 +142,11 @@ class Dialog {
     DialogRequestSender request_sender =
         DialogRequestSender(this, request, eventHandlers);
 
-    request_sender.send();
+    try {
+      request_sender.send();
+    } catch (err) {
+      print('Error on sendRequest: $err');
+    }
 
     // Return the instance of OutgoingRequest.
     return request;
