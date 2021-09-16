@@ -129,6 +129,9 @@ class SIPUAHelper extends EventManager {
 
       _ua.on(EventSocketDisconnected(), (EventSocketDisconnected event) {
         logger.debug('disconnected => ' + (event.cause.toString()));
+        if (event.cause.status_code == 1005) {
+          return;
+        }
         _notifyTransportStateListeners(TransportState(
             TransportStateEnum.DISCONNECTED,
             cause: event.cause));
