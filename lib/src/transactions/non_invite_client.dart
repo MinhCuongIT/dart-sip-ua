@@ -51,11 +51,11 @@ class NonInviteClientTransaction extends TransactionBase {
   @override
   void onTransportError() {
     logger.debug('transport error occurred, deleting transaction $id');
-    clearTimeout(F);
-    clearTimeout(K);
-    stateChanged(TransactionState.TERMINATED);
-    ua.destroyTransaction(this);
-    _eventHandlers.emit(EventOnTransportError());
+    // clearTimeout(F);
+    // clearTimeout(K);
+    // stateChanged(TransactionState.TERMINATED);
+    // ua.destroyTransaction(this);
+    // _eventHandlers.emit(EventOnTransportError());
   }
 
   void timer_F() {
