@@ -161,7 +161,7 @@ class WebSocketInterface implements Socket {
     if (wasClean == false) {
       logger.debug('WebSocket abrupt disconnection');
     }
-    ondisconnect(this, !wasClean, code, reason);
+    // ondisconnect(this, !wasClean, code, reason);
   }
 
   void _onMessage(dynamic data) {
