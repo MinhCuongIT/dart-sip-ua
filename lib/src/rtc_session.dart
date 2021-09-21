@@ -1585,20 +1585,20 @@ class RTCSession extends EventManager {
   Future<void> _createRTCConnection(Map<String, dynamic> pcConfig,
       Map<String, dynamic> rtcConstraints) async {
     _connection = await createPeerConnection(pcConfig, rtcConstraints);
-    _connection.onIceConnectionState = (RTCIceConnectionState state) {
-      // TODO(cloudwebrtc): Do more with different states.
-      if (state == RTCIceConnectionState.RTCIceConnectionStateFailed) {
-        terminate(<String, dynamic>{
-          'cause': DartSIP_C.causes.RTP_TIMEOUT,
-          'status_code': 408,
-          'reason_phrase': DartSIP_C.causes.RTP_TIMEOUT
-        });
-      } else if (state ==
-          RTCIceConnectionState.RTCIceConnectionStateDisconnected) {
-        print('RTCIceConnectionStateDisconnected');
-        // _iceRestart();
-      }
-    };
+    // _connection.onIceConnectionState = (RTCIceConnectionState state) {
+    //   // TODO(cloudwebrtc): Do more with different states.
+    //   if (state == RTCIceConnectionState.RTCIceConnectionStateFailed) {
+    //     terminate(<String, dynamic>{
+    //       'cause': DartSIP_C.causes.RTP_TIMEOUT,
+    //       'status_code': 408,
+    //       'reason_phrase': DartSIP_C.causes.RTP_TIMEOUT
+    //     });
+    //   } else if (state ==
+    //       RTCIceConnectionState.RTCIceConnectionStateDisconnected) {
+    //     print('RTCIceConnectionStateDisconnected');
+    //     // _iceRestart();
+    //   }
+    // };
 
     // In future versions, unified-plan will be used by default
     String sdpSemantics = 'unified-plan';
