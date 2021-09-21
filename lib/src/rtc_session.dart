@@ -1595,7 +1595,8 @@ class RTCSession extends EventManager {
         });
       } else if (state ==
           RTCIceConnectionState.RTCIceConnectionStateDisconnected) {
-        _iceRestart();
+        print('RTCIceConnectionStateDisconnected');
+        // _iceRestart();
       }
     };
 
