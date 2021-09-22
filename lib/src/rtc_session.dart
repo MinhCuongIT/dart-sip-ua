@@ -478,7 +478,8 @@ class RTCSession extends EventManager {
     bool peerOffersFullVideo = false;
 
     // In future versions, unified-plan will be used by default
-    String sdpSemantics = 'unified-plan';
+    // String sdpSemantics = 'unified-plan';
+    String sdpSemantics = 'plan-b';
     if (pcConfig['sdpSemantics'] != null) {
       sdpSemantics = pcConfig['sdpSemantics'];
     }
@@ -1601,7 +1602,8 @@ class RTCSession extends EventManager {
     };
 
     // In future versions, unified-plan will be used by default
-    String sdpSemantics = 'unified-plan';
+    // String sdpSemantics = 'unified-plan';
+    String sdpSemantics = 'plan-b';
     if (pcConfig['sdpSemantics'] != null) {
       sdpSemantics = pcConfig['sdpSemantics'];
     }
@@ -2196,7 +2198,8 @@ class RTCSession extends EventManager {
     RequestSender request_sender = RequestSender(_ua, _request, handlers);
 
     // In future versions, unified-plan will be used by default
-    String sdpSemantics = 'unified-plan';
+    // String sdpSemantics = 'unified-plan';
+    String sdpSemantics = 'plan-b';
     if (pcConfig['sdpSemantics'] != null) {
       sdpSemantics = pcConfig['sdpSemantics'];
     }

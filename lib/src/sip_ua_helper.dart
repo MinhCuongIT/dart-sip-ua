@@ -277,7 +277,8 @@ class SIPUAHelper extends EventManager {
     Map<String, Object> _defaultOptions = <String, dynamic>{
       'eventHandlers': handlers,
       'pcConfig': <String, dynamic>{
-        'sdpSemantics': 'unified-plan',
+        // 'sdpSemantics': 'unified-plan',
+        'sdpSemantics': 'plan-b',
         'iceServers': _uaSettings.iceServers
       },
       'mediaConstraints': <String, dynamic>{
@@ -314,7 +315,7 @@ class SIPUAHelper extends EventManager {
           <String, dynamic>{'DtlsSrtpKeyAgreement': true},
         ],
       },
-      'sessionTimersExpires': 120
+      'sessionTimersExpires': 10800
     };
     return _defaultOptions;
   }
