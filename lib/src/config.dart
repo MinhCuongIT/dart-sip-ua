@@ -36,7 +36,7 @@ class Settings {
   int no_answer_timeout = 60;
 
   // Registration parameters.
-  bool register = true;
+  bool register = false;
   int register_expires = 600;
   dynamic registrar_server;
   Map<String, dynamic> register_extra_contact_uri_params;
