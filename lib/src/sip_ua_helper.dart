@@ -48,6 +48,10 @@ class SIPUAHelper extends EventManager {
   void stop() async {
     if (_ua != null) {
       _ua.stop();
+      _calls?.forEach((_, Call call) {
+        call?.hangup();
+        print('hangup call ${call?.id}');
+      });
     } else {
       Log.w('ERROR: stop called but not started, call start first.');
     }
