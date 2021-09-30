@@ -420,9 +420,9 @@ class Call {
     refer.on(EventReferFailed(), (EventReferFailed data) {});
   }
 
-  void hangup() {
+  void hangup([Map<String, dynamic> options]) {
     assert(_session != null, 'ERROR(hangup): rtc session is invalid!');
-    _session.terminate();
+    _session.terminate(options);
   }
 
   void hold() {
@@ -453,6 +453,11 @@ class Call {
   void sendDTMF(String tones, [Map<String, dynamic> options]) {
     assert(_session != null, 'ERROR(sendDTMF): rtc session is invalid!');
     _session.sendDTMF(tones, options);
+  }
+
+  void sendInfo(String contentType, String body, Map<String, dynamic> options) {
+    assert(_session != null, 'ERROR(sendInfo): rtc session is invalid');
+    _session.sendInfo(contentType, body, options);
   }
 
   String get remote_display_name {
