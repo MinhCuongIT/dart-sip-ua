@@ -73,12 +73,16 @@ class SIPUAHelper extends EventManager {
   }
 
   Future<bool> call(String target,
-      {bool voiceonly = false, MediaStream mediaStream = null}) async {
+      {bool voiceonly = false,
+      MediaStream mediaStream = null,
+      List<String> headers = const []}) async {
     if (_ua != null && _ua.isConnected()) {
       Map<String, Object> options = buildCallOptions(voiceonly);
       if (mediaStream != null) {
         options['mediaStream'] = mediaStream;
       }
+      List<dynamic> extHeaders = options['extraHeaders'];
+      extHeaders.addAll(headers);
       _ua.call(target, options);
       return true;
     } else {
@@ -116,6 +120,8 @@ class SIPUAHelper extends EventManager {
     _settings.register_extra_contact_uri_params =
         uaSettings.registerParams.extraContactUriParams;
     _settings.dtmf_mode = uaSettings.dtmfMode;
+    _settings.session_timers = uaSettings.sessionTimers;
+    _settings.ice_gathering_timeout = uaSettings.iceGatheringTimeout;
 
     try {
       _ua = UA(_settings);
@@ -280,6 +286,7 @@ class SIPUAHelper extends EventManager {
 
     Map<String, Object> _defaultOptions = <String, dynamic>{
       'eventHandlers': handlers,
+      'extraHeaders': <dynamic>[],
       'pcConfig': <String, dynamic>{
         // 'sdpSemantics': 'unified-plan',
         'sdpSemantics': 'plan-b',
@@ -399,6 +406,7 @@ class Call {
 
   String get id => _id;
   RTCPeerConnection get peerConnection => _session.connection;
+  RTCSession get session => _session;
   CallStateEnum state;
 
   void answer(Map<String, Object> options, {MediaStream mediaStream = null}) {
@@ -641,6 +649,12 @@ class UaSettings {
 
   /// DTMF mode, in band (rfc2833) or out of band (sip info)
   DtmfMode dtmfMode = DtmfMode.INFO;
+
+  /// Session Timers
+  bool sessionTimers = true;
+
+  /// ICE Gathering Timeout, default 500ms
+  int iceGatheringTimeout = 500;
 
   List<Map<String, String>> iceServers = <Map<String, String>>[
     <String, String>{'url': 'stun:stun.l.google.com:19302'},
