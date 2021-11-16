@@ -38,24 +38,24 @@ class NonInviteClientTransaction extends TransactionBase {
 
   @override
   void send() {
-    stateChanged(TransactionState.TRYING);
-    F = setTimeout(() {
-      timer_F();
-    }, Timers.TIMER_F);
+    // stateChanged(TransactionState.TRYING);
+    // F = setTimeout(() {
+    //   timer_F();
+    // }, Timers.TIMER_F);
 
-    if (!transport.send(request)) {
-      onTransportError();
-    }
+    // if (!transport.send(request)) {
+    //   onTransportError();
+    // }
   }
 
   @override
   void onTransportError() {
     logger.debug('transport error occurred, deleting transaction $id');
-    clearTimeout(F);
-    clearTimeout(K);
-    stateChanged(TransactionState.TERMINATED);
-    ua.destroyTransaction(this);
-    _eventHandlers.emit(EventOnTransportError());
+    // clearTimeout(F);
+    // clearTimeout(K);
+    // stateChanged(TransactionState.TERMINATED);
+    // ua.destroyTransaction(this);
+    // _eventHandlers.emit(EventOnTransportError());
   }
 
   void timer_F() {

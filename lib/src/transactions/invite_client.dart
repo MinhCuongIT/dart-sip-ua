@@ -53,17 +53,17 @@ class InviteClientTransaction extends TransactionBase {
 
   @override
   void onTransportError() {
-    clearTimeout(B);
-    clearTimeout(D);
-    clearTimeout(M);
+    // clearTimeout(B);
+    // clearTimeout(D);
+    // clearTimeout(M);
 
-    if (state != TransactionState.ACCEPTED) {
-      logger.debug('transport error occurred, deleting transaction $id');
-      _eventHandlers.emit(EventOnTransportError());
-    }
+    // if (state != TransactionState.ACCEPTED) {
+    //   logger.debug('transport error occurred, deleting transaction $id');
+    //   _eventHandlers.emit(EventOnTransportError());
+    // }
 
-    stateChanged(TransactionState.TERMINATED);
-    ua.destroyTransaction(this);
+    // stateChanged(TransactionState.TERMINATED);
+    // ua.destroyTransaction(this);
   }
 
   // RFC 6026 7.2.
