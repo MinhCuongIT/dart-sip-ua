@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:sip_ua/src/data.dart';
-
 import 'config.dart' as config;
 import 'config.dart';
 import 'constants.dart' as DartSIP_C;
@@ -52,8 +51,8 @@ class DynamicSettings {
 class Contact {
   Contact(this.uri);
 
-  String pub_gruu;
-  String temp_gruu;
+  String? pub_gruu;
+  String? temp_gruu;
   bool anonymous = false;
   bool outbound = false;
   URI uri;
@@ -139,7 +138,7 @@ class UA extends EventManager {
   int _error;
   TransactionBag _transactions = TransactionBag();
   Map<String, dynamic> _data;
-  Timer _closeTimer;
+  Timer? _closeTimer;
   dynamic _registrator;
 
   int get status => _status;
@@ -454,7 +453,10 @@ class UA extends EventManager {
   /**
    * RTCSession
    */
-  void newRTCSession({RTCSession session, String originator, dynamic request}) {
+  void newRTCSession(
+      {required RTCSession session,
+      required String originator,
+      dynamic request}) {
     _sessions[session.id] = session;
     emit(EventNewRTCSession(
         session: session, originator: originator, request: request));

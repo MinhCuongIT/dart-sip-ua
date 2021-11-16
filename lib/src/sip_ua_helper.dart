@@ -1,8 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:logger/logger.dart';
-import 'package:sip_ua/src/rtc_session/refer_subscriber.dart';
 
+import 'package:sip_ua/src/rtc_session/refer_subscriber.dart';
 import 'config.dart';
 import 'constants.dart' as DartSIP_C;
 import 'event_manager/event_manager.dart';
@@ -19,7 +20,7 @@ class SIPUAHelper extends EventManager {
     Log.loggingLevel = Level.debug;
   }
 
-  UA _ua;
+  UA? _ua;
   Settings _settings;
   UaSettings _uaSettings;
   final Map<String, Call> _calls = <String, Call>{};
@@ -29,29 +30,15 @@ class SIPUAHelper extends EventManager {
 
   set loggingLevel(Level loggingLevel) => Log.loggingLevel = loggingLevel;
 
-  bool get registered {
-    if (_ua != null) {
-      return _ua.isRegistered();
-    }
-    return false;
-  }
+  bool get registered => _ua?.isRegistered() ?? false;
 
-  bool get connected {
-    if (_ua != null) {
-      return _ua.isConnected();
-    }
-    return false;
-  }
+  bool get connected => _ua?.isConnected() ?? false;
 
   RegistrationState get registerState => _registerState;
 
   void stop() async {
     if (_ua != null) {
-      _ua.stop();
-      // _calls?.forEach((_, Call call) {
-      //   call?.hangup();
-      //   print('hangup call ${call?.id}');
-      // });
+      _ua?.stop();
     } else {
       Log.w('ERROR: stop called but not started, call start first.');
     }
@@ -60,7 +47,7 @@ class SIPUAHelper extends EventManager {
   void register() {
     assert(_ua != null,
         'register called but not started, you must call start first.');
-    _ua.register();
+    _ua?.register();
   }
 
   void unregister([bool all = true]) {
@@ -92,7 +79,7 @@ class SIPUAHelper extends EventManager {
     return false;
   }
 
-  Call findCall(String id) {
+  Call? findCall(String id) {
     return _calls[id];
   }
 
@@ -100,7 +87,7 @@ class SIPUAHelper extends EventManager {
     if (_ua != null) {
       logger.warn(
           'UA instance already exist!, stopping UA and creating a one...');
-      _ua.stop();
+      _ua?.stop();
     }
 
     _uaSettings = uaSettings;
@@ -124,20 +111,20 @@ class SIPUAHelper extends EventManager {
     _settings.ice_gathering_timeout = uaSettings.iceGatheringTimeout;
 
     try {
-      _ua = UA(_settings);
-      _ua.on(EventSocketConnecting(), (EventSocketConnecting event) {
+      UA ua = UA(_settings);
+      ua.on(EventSocketConnecting(), (EventSocketConnecting event) {
         logger.debug('connecting => ' + event.toString());
         _notifyTransportStateListeners(
             TransportState(TransportStateEnum.CONNECTING));
       });
 
-      _ua.on(EventSocketConnected(), (EventSocketConnected event) {
+      ua.on(EventSocketConnected(), (EventSocketConnected event) {
         logger.debug('connected => ' + event.toString());
         _notifyTransportStateListeners(
             TransportState(TransportStateEnum.CONNECTED));
       });
 
-      _ua.on(EventSocketDisconnected(), (EventSocketDisconnected event) {
+      ua.on(EventSocketDisconnected(), (EventSocketDisconnected event) {
         logger.debug('disconnected => ' + (event.cause.toString()));
         if (event.cause.status_code == 1005) {
           return;
@@ -147,21 +134,21 @@ class SIPUAHelper extends EventManager {
             cause: event.cause));
       });
 
-      _ua.on(EventRegistered(), (EventRegistered event) {
+      ua.on(EventRegistered(), (EventRegistered event) {
         logger.debug('registered => ' + event.cause.toString());
         _registerState = RegistrationState(
             state: RegistrationStateEnum.REGISTERED, cause: event.cause);
         _notifyRegsistrationStateListeners(_registerState);
       });
 
-      _ua.on(EventUnregister(), (EventUnregister event) {
+      ua.on(EventUnregister(), (EventUnregister event) {
         logger.debug('unregistered => ' + event.cause.toString());
         _registerState = RegistrationState(
             state: RegistrationStateEnum.UNREGISTERED, cause: event.cause);
         _notifyRegsistrationStateListeners(_registerState);
       });
 
-      _ua.on(EventRegistrationFailed(), (EventRegistrationFailed event) {
+      ua.on(EventRegistrationFailed(), (EventRegistrationFailed event) {
         logger.debug('registrationFailed => ' + (event.cause.toString()));
         _registerState = RegistrationState(
             state: RegistrationStateEnum.REGISTRATION_FAILED,
@@ -169,7 +156,7 @@ class SIPUAHelper extends EventManager {
         _notifyRegsistrationStateListeners(_registerState);
       });
 
-      _ua.on(EventNewRTCSession(), (EventNewRTCSession event) {
+      ua.on(EventNewRTCSession(), (EventNewRTCSession event) {
         logger.debug('newRTCSession => ' + event.toString());
         RTCSession session = event.session;
         if (session.direction == 'incoming') {
@@ -183,7 +170,7 @@ class SIPUAHelper extends EventManager {
             event, CallState(CallStateEnum.CALL_INITIATION));
       });
 
-      _ua.on(EventNewMessage(), (EventNewMessage event) {
+      ua.on(EventNewMessage(), (EventNewMessage event) {
         logger.debug('newMessage => ' + event.toString());
         //Only notify incoming message to listener
         if (event.message.direction == 'incoming') {
@@ -193,7 +180,8 @@ class SIPUAHelper extends EventManager {
         }
       });
 
-      _ua.start();
+      ua.start();
+      _ua = ua;
     } catch (event, s) {
       logger.error(event.toString(), null, s);
     }
@@ -284,7 +272,7 @@ class SIPUAHelper extends EventManager {
       }, buildCallOptions(true));
     });
 
-    Map<String, Object> _defaultOptions = <String, dynamic>{
+    Map<String, Object> _defaultOptions = <String, Object>{
       'eventHandlers': handlers,
       'extraHeaders': <dynamic>[],
       'pcConfig': <String, dynamic>{
@@ -328,11 +316,12 @@ class SIPUAHelper extends EventManager {
       },
       'sessionTimersExpires': 10800
     };
+
     return _defaultOptions;
   }
 
   Message sendMessage(String target, String body,
-      [Map<String, dynamic> options]) {
+      [Map<String, dynamic>? options]) {
     return _ua.sendMessage(target, body, options);
   }
 
